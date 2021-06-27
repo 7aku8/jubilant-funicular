@@ -1,7 +1,7 @@
 {
   "name": "jubilant-funicular",
   "version": "1.0.0",
-  "description": "Script to create multiple logos from given templates based on CSV file.",
+  "description": "Script to create multiple logos from given templates based on CSV file",
   "main": "index.ts",
   "scripts": {
     "generate": "ts-node index.ts",
