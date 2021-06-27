@@ -15,8 +15,6 @@ class CSVParser {
 
     if (fileName) {
       this.path = `${__dirname}/../../input/${fileName}.csv`;
-
-      console.log(this.path)
     } else {
       logger.error({ message: 'file name has not been provided!' });
     }
@@ -68,9 +66,7 @@ class CSVParser {
         }
       }
 
-      console.log(logosData);
-      console.log(invalidEntries);
-
+      return logosData;
     } catch (e) {
       console.log(e);
       logger.error({ message: 'get data error' });

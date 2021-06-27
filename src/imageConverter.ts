@@ -1,14 +1,17 @@
 import csvParser from './utils/csvPraser';
 
+import { LogoData } from './interfaces/LogoData';
+
 class ImageConverter {
   private csvParser = csvParser;
 
-  constructor() {
-
-  }
+  private logosData: LogoData[]|null = null;
 
   public async parse() {
-    console.log(await this.csvParser.getData());
+    this.logosData = await this.csvParser.getData();
+
+
+    console.log(this.logosData);
   }
 }
 
