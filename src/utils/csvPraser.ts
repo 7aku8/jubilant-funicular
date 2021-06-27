@@ -2,6 +2,7 @@ import { CsvRow } from '../interfaces/CsvRow';
 
 const csv = require('csvtojson');
 import { default as logger } from './../logger';
+import { LogoData } from '../interfaces/LogoData';
 
 class CSVParser {
   private readonly path: string = '';
@@ -33,10 +34,44 @@ class CSVParser {
     try {
       await this.readFile();
 
-      const slugsOnly = this.rows.map(x => x.slug);
+      const namesOnly = this.rows.map(x => x.sku);
+      const logosData: LogoData[] = [];
 
+      for (const slug of namesOnly) {
+        const temp: LogoData = {
+          name: null,
+          price: {
+            amount: null,
+            currency: null
+          }
+        };
+
+        const split = slug.split('-').reverse();
+
+        if (split[0].length === 2) {
+          temp.country = (split.shift() as string).toLowerCase();
+        }
+        if (split[0].length === 3) {
+          temp.price.currency = (split.shift() as string).toLowerCase();
+
+          // if (isNaN(parseInt((split.shift() as string), 10))) {
+          //   console.log(temp);
+          // }
+
+          temp.price.amount = parseInt((split.shift() as string), 10);
+        }
+        temp.name = split.reverse().join(' ');
+
+        if (temp.name && temp.price.amount && temp.price.amount) {
+          logosData.push(temp);
+        }
+
+      }
+
+      console.log(logosData);
 
     } catch (e) {
+      console.log(e);
       logger.error({ message: 'get data error' });
       throw Error('get data error');
     }
