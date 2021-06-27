@@ -1,8 +1,10 @@
-import { CsvRow } from '../interfaces/CsvRow';
-
 const csv = require('csvtojson');
+
 import { default as logger } from './../logger';
+
+import { CsvRow } from '../interfaces/CsvRow';
 import { LogoData } from '../interfaces/LogoData';
+
 
 class CSVParser {
   private readonly path: string = '';
@@ -36,6 +38,7 @@ class CSVParser {
 
       const namesOnly = this.rows.map(x => x.sku);
       const logosData: LogoData[] = [];
+      const invalidEntries: string[] = [];
 
       for (const slug of namesOnly) {
         const temp: LogoData = {
@@ -54,21 +57,19 @@ class CSVParser {
         if (split[0].length === 3) {
           temp.price.currency = (split.shift() as string).toLowerCase();
 
-          // if (isNaN(parseInt((split.shift() as string), 10))) {
-          //   console.log(temp);
-          // }
-
           temp.price.amount = parseInt((split.shift() as string), 10);
         }
         temp.name = split.reverse().join(' ');
 
         if (temp.name && temp.price.amount && temp.price.amount) {
           logosData.push(temp);
+        } else {
+           invalidEntries.push(slug);
         }
-
       }
 
       console.log(logosData);
+      console.log(invalidEntries);
 
     } catch (e) {
       console.log(e);
