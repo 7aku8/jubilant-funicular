@@ -8,15 +8,18 @@ class LoggerWinston {
   private logger: Logger;
 
   constructor() {
-     this.logger = winston.createLogger({
+    this.logger = winston.createLogger({
       level: 'info',
       format: winston.format.json(),
-      defaultMeta: { service: 'user-service' },
       transports: [
         new winston.transports.File({ filename: 'error.log', level: 'error' }),
         new winston.transports.File({ filename: 'combined.log' }),
       ],
     });
+
+    this.logger.add(new winston.transports.Console({
+      format: winston.format.simple(),
+    }));
   }
 
   public static getInstance() {
@@ -27,10 +30,10 @@ class LoggerWinston {
     return LoggerWinston.instance;
   }
 
-  public log(data: Message) {
+  public info(data: Message) {
     const { message } = data;
 
-    return this.logger.log(message, new Date());
+    return this.logger.info(message, new Date());
   }
 
   public warn(data: Message) {
