@@ -1,0 +1,27 @@
+{
+  "name": "jubilant-funicular",
+  "version": "1.0.0",
+  "description": "Script to create multiple logos from given templates based on CSV file",
+  "main": "index.ts",
+  "scripts": {
+    "generate": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JakubWolak/jubilant-funicular.git"
+  },
+  "keywords": [
+    "csv",
+    "logo"
+  ],
+  "author": "Jakub Wolak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JakubWolak/jubilant-funicular/issues"
+  },
+  "homepage": "https://github.com/JakubWolak/jubilant-funicular#readme",
+  "dependencies": {
+    "ts-node": "^10.0.0"
+  }
+}
