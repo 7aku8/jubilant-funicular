@@ -1,17 +1,22 @@
 import Jimp from 'jimp';
-import { readdirSync, rename } from 'fs';
-import { resolve } from 'path';
-import { getNameList } from 'country-list';
+// import { readdirSync, rename } from 'fs';
+// import { resolve } from 'path';
+// import { getNameList } from 'country-list';
 
 import { default as logger } from './../logger';
-import { resourceLimits } from 'worker_threads';
+import { LogoData } from '../interfaces/LogoData';
+// import { resourceLimits } from 'worker_threads';
 
 class CombineImages {
+  private readonly logoData;
   private image;
+  private flag;
 
-  constructor() {
+  constructor(data: { info: LogoData }) {
     try {
-      console.log('jeszcze nie wiem co tu bedzie');
+      const { info } = data;
+
+      this.logoData = info;
     } catch (e) {
       logger.error({ message: `combine images initialize ERROR => ${e}` });
       throw Error('combine images initialize ERROR');
@@ -20,14 +25,16 @@ class CombineImages {
 
   public async readImage() {
     try {
+
+      if (!this.logoData.country) { console.log('empty'); return; }
+
       this.image = await Jimp.read(`${__dirname}/../../templates/cover.jpeg`);
+      this.flag = await Jimp.read(`${__dirname}/../../templates/flags/${this.logoData.country}.png`);
+      this.flag.resize(50, 50);
 
+      this.image.composite(this.flag, 10, 10);
 
-      const imageDirPath = resolve(`${__dirname}/../../templates/flags`);
-      const files = readdirSync(imageDirPath);
-
-
-      console.log(this.image);
+      this.image.write(`results/${this.logoData.name}.png`);
     } catch (e) {
       logger.error({ message: `read image ERROR => ${e}` });
       throw Error('read image ERROR');
@@ -35,9 +42,11 @@ class CombineImages {
   }
 }
 
-export default new CombineImages();
+export default CombineImages;
 
 
+// const imageDirPath = resolve(`${__dirname}/../../templates/flags`);
+// const files = readdirSync(imageDirPath);
 // const getFileName = (data: { name: string }) => {
 //   const { name } = data;
 //
