@@ -1,4 +1,4 @@
-const csv = require('csvtojson');
+import csv from 'csvtojson';
 
 import { default as logger } from './../logger';
 
