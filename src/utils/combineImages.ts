@@ -46,7 +46,7 @@ class CombineImages {
 
   public async saveImage() {
     try {
-      this.image.write(`results/${this.logoData.name}.png`);
+      this.image.write(`results/${this.logoData.nameToBeSaved}.png`);
     } catch (e) {
       logger.error({ message: `save image ERROR => ${e}` });
       throw Error('save image ERROR');

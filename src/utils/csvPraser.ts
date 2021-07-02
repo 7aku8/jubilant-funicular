@@ -46,6 +46,7 @@ class CSVParser {
 
       for (const slug of namesOnly) {
         const temp: LogoData = {
+          nameToBeSaved: slug.toLowerCase(),
           name: null,
           price: {
             amount: null,
