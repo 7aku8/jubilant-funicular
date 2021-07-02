@@ -25,6 +25,7 @@
     "country-list": "^2.2.0",
     "csvtojson": "^2.0.10",
     "currency-codes": "^2.1.0",
+    "currency-symbol-map": "^5.0.1",
     "dotenv": "^10.0.0",
     "fs": "0.0.1-security",
     "jimp": "^0.16.1",

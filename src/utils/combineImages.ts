@@ -5,13 +5,15 @@ import Jimp from 'jimp';
 
 import { default as logger } from './../logger';
 import { LogoData } from '../interfaces/LogoData';
+import getSymbolFromCurrency from 'currency-symbol-map'
 // import { resourceLimits } from 'worker_threads';
 
 class CombineImages {
   private readonly logoData;
   private image;
   private flag;
-  private font;
+  private fontName;
+  private fontPrice;
 
   constructor(data: { info: LogoData }) {
     try {
@@ -36,8 +38,13 @@ class CombineImages {
       }
 
       // add payment method name to image
-      this.font = await Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
-      this.image.print(this.font, 10, 80, this.logoData.name);
+      this.fontName = await Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
+      this.image.print(this.fontName, 10, 80, this.logoData.name);
+
+      // add price to image
+      this.fontPrice = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
+      const price = `${this.logoData.price.amount} ${getSymbolFromCurrency(this.logoData.price.currency)}`;
+      this.image.print(this.fontPrice, 10, 110, price);
     } catch (e) {
       logger.error({ message: `read image ERROR => ${e}` });
       throw Error('read image ERROR');
