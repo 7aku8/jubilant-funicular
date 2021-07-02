@@ -16,7 +16,6 @@ class ImageConverter {
 
       await combine.readImage();
     }
-    console.log(this.logosData);
   }
 }
 

@@ -25,9 +25,6 @@ class CombineImages {
 
   public async readImage() {
     try {
-
-      if (!this.logoData.country) { console.log('empty'); return; }
-
       this.image = await Jimp.read(`${__dirname}/../../templates/cover.jpeg`);
       this.flag = await Jimp.read(`${__dirname}/../../templates/flags/${this.logoData.country}.png`);
       this.flag.resize(50, 50);

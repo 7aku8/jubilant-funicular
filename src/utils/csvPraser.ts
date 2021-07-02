@@ -1,4 +1,6 @@
 import csv from 'csvtojson';
+import { codes } from 'currency-codes';
+import { getCodes } from 'country-list';
 
 import { default as logger } from './../logger';
 
@@ -38,26 +40,44 @@ class CSVParser {
       const logosData: LogoData[] = [];
       const invalidEntries: string[] = [];
 
+      const countryCodes = getCodes();
+
+      let priceIndex = null;
+
       for (const slug of namesOnly) {
         const temp: LogoData = {
           name: null,
           price: {
             amount: null,
             currency: null
-          }
+          },
+          country: null
         };
 
-        const split = slug.split('-').reverse();
+        const split = slug.split('-');
 
-        if (split[0].length === 2) {
-          temp.country = (split.shift() as string).toLowerCase();
-        }
-        if (split[0].length === 3) {
-          temp.price.currency = (split.shift() as string).toLowerCase();
+        for (const word of split) {
+          // search currency
+          if (codes().includes(word.toUpperCase())) {
+            const index = split.indexOf(word);
 
-          temp.price.amount = parseInt((split.shift() as string), 10);
+            temp.price.amount = parseInt(split[index - 1], 10);
+            temp.price.currency = word.toLowerCase();
+          }
+
+          // search country
+          if (countryCodes.includes(word.toUpperCase())) {
+            temp.country = word.toLowerCase();
+          }
+
+          if (!isNaN(word as any)) {
+            priceIndex = split.indexOf(word);
+          }
         }
-        temp.name = split.reverse().join(' ');
+
+        // search for name
+        const name = split.slice(0, priceIndex).join(' ');
+        temp.name = name;
 
         if (temp.name && temp.price.amount && temp.price.amount) {
           logosData.push(temp);
@@ -65,6 +85,9 @@ class CSVParser {
            invalidEntries.push(slug);
         }
       }
+
+      let counter = 0;
+      logosData.forEach(x => { if (!x.country) { counter++; } });
 
       return logosData;
     } catch (e) {
