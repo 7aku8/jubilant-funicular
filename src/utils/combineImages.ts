@@ -11,6 +11,7 @@ class CombineImages {
   private readonly logoData;
   private image;
   private flag;
+  private font;
 
   constructor(data: { info: LogoData }) {
     try {
@@ -26,15 +27,29 @@ class CombineImages {
   public async readImage() {
     try {
       this.image = await Jimp.read(`${__dirname}/../../templates/cover.jpeg`);
-      this.flag = await Jimp.read(`${__dirname}/../../templates/flags/${this.logoData.country}.png`);
-      this.flag.resize(50, 50);
 
-      this.image.composite(this.flag, 10, 10);
+      // add flag to image
+      if (this.logoData.country) {
+        this.flag = await Jimp.read(`${ __dirname }/../../templates/flags/${ this.logoData.country }.png`);
+        this.flag.resize(50, 50);
+        this.image.composite(this.flag, 10, 10);
+      }
 
-      this.image.write(`results/${this.logoData.name}.png`);
+      // add payment method name to image
+      this.font = await Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
+      this.image.print(this.font, 10, 80, this.logoData.name);
     } catch (e) {
       logger.error({ message: `read image ERROR => ${e}` });
       throw Error('read image ERROR');
+    }
+  }
+
+  public async saveImage() {
+    try {
+      this.image.write(`results/${this.logoData.name}.png`);
+    } catch (e) {
+      logger.error({ message: `save image ERROR => ${e}` });
+      throw Error('save image ERROR');
     }
   }
 }

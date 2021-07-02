@@ -11,11 +11,20 @@ class ImageConverter {
   public async parse() {
     this.logosData = await this.csvParser.getData();
 
+    console.log(`Images to be generated: ${this.logosData.length}`);
+    let counter = 0;
+
     for (const data of this.logosData) {
       const combine = new CombineImages({ info: data });
 
       await combine.readImage();
+      await combine.saveImage();
+
+      counter++;
+      console.log(`Done ${counter} / ${this.logosData.length}`);
     }
+
+    console.log('==== GENERATING FINISHED ====');
   }
 }
 
